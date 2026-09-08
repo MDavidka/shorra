@@ -11,10 +11,10 @@ import {
   Lightbulb,
   Table,
   CheckSquare,
-  Code,
   ArrowRight,
   Eye,
-  Settings,
+  ImageIcon,
+  ThumbsUp,
 } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
@@ -22,115 +22,78 @@ import { Textarea } from "@/components/ui/textarea";
 
 const SAMPLE_TEMPLATES = [
   {
-    title: "🌟 1. Szókincs & Kifejezések Sablon",
-    description: "Tökéletes szótárakhoz, új szavakhoz és kiejtési útmutatókhoz.",
-    markdown: `# 1.1 Alapvető Kifejezések
+    title: "✨ 1. Fotó szerinti Shorra Sablon (Kép + Do/Don't)",
+    description: "Tiszta, tágas elrendezés képpel, teendőkkel és helyes/helytelen példákkal.",
+    markdown: `# Cím
 
-Ismerd meg a mindennapi élet legfontosabb szavait!
+Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
----
+![kép]()
 
-## 📖 Szótár Táblázat
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
-| Angol kifejezés | Kiejtés | Magyar jelentés |
+## 👍 Do this
+
+- [x] Használj tiszta, átlátható bekezdéseket és elegendő térközt
+- [x] Emeld ki a fontos kifejezéseket **félkövérrel**
+
+## 👎 not this
+
+- [ ] Ne zsúfold össze a szövegeket túl sok szegéllyel
+- [ ] Ne használj túl sűrű táblázatokat magyarázat nélkül
+
+| Kifejezés | Kiejtés | Jelentés |
 | :--- | :--- | :--- |
-| **Welcome** | *vel-kam* | Üdvözöljük |
+| **Hello** | *heló* | Szia / Üdvözlöm |
+| **Good morning** | *gud morning* | Jó reggelt |
 | **Thank you** | *thenk ju* | Köszönöm |
-| **Please** | *plíz* | Kérem / Legyen szíves |
+`,
+  },
+  {
+    title: "👋 2. Notion-stílusú Bevezető Sablon",
+    description: "Letisztult bevezetés interaktív teendőkkel és tipp dobozzal.",
+    markdown: `# 👋 Welcome to Shorra!
+
+Kezdd el a tanulást egyszerűen és magabiztosan!
+
+- [x] Hozz létre egy profilt
+- [ ] Olvasd el a lecke alapjait
+- [ ] Gyakorold a kiejtést a szótár táblázatból
+
+![Tanulási útmutató]()
 
 > [!TIP]
-> A *"Thank you very much"* kifejezést használd, ha különösen hálás vagy valamiért!
-`,
-  },
-  {
-    title: "💡 2. Nyelvtan & Szabályok Sablon",
-    description: "Nyelvtani szabályok, mondatszerkezetek és magyarázatok bemutatására.",
-    markdown: `# 2.1 Present Simple (Egyszerű Jelen)
-
-A **Present Simple** igeidőt rendszeres, ismétlődő cselekvések kifejezésére használjuk.
-
----
-
-## 📌 Képzési Szabály
-
-- **I / You / We / They** + Ige alapalakja (pl. \`I work\`)
-- **He / She / It** + Ige + **-s / -es** végződés (pl. \`He works\`)
-
-> [!NOTE]
-> Ne felejtsd el a harmadik személyű **-s** ragot E/3-ban!
-> *Helyes:* She plays tennis.  
-> *Helytelen:* She play tennis.
-
-\`\`\`text
-Példamondatok:
-- I drink coffee every morning. (Minden reggel kávét iszom.)
-- The sun rises in the east. (A nap keleten kel fel.)
-\`\`\`
-`,
-  },
-  {
-    title: "🎯 3. Interaktív Kvíz & Gyakorló Feladat",
-    description: "Önellenőrző feladatok, tesztek és feleletválasztós kérdések.",
-    markdown: `# 3.1 Gyakorló Kvíz & Teszt
-
-Válaszd ki a helyes megoldást az alábbi kérdésekre!
-
----
-
-### 1. Kérdés: Melyik a helyes mondat?
-- [ ] He go to school by bus.
-- [x] He goes to school by bus.
-
----
-
-### 2. Kérdés: Melyik a megfelelő köszönés délután 15:00-kor?
-- [x] Good afternoon!
-- [ ] Good morning!
-
-> [!IMPORTANT]
-> Ha kész vagy, jelöld be a lecke alján a teljesítés gombot a pontokért!
+> A rendszeres napi 5 perc gyakorlás sokkal hatékonyabb, mint heti egyszer 1 óra!
 `,
   },
 ];
 
 export default function DocsPage() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [playgroundText, setPlaygroundText] = useState<string>(`# 🚀 Élő Markdown Tesztelő
+  const [playgroundText, setPlaygroundText] = useState<string>(`# Cím
 
-Próbáld ki bátran a szerkesztést ezen a felületen!
+Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
----
+![kép]()
 
-## 💡 Kiemelt Dobozok (Callouts)
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
-> [!TIP]
-> Ez egy zöld tipp doboz. Nagyszerű tanulási trükkök kiemelésére!
+## 👍 Do this
 
-> [!NOTE]
-> Ez egy kék információs doboz fontos részletekhez.
+- [x] Használj tiszta, átlátható bekezdéseket és elegendő térközt
+- [x] Emeld ki a kulcsszavakat **félkövérrel**
 
-> [!IMPORTANT]
-> Ez egy sárga figyelmeztetés kritikus tudnivalókhoz.
+## 👎 not this
 
----
+- [ ] Ne használj túl sok zavaró szegélyt
+- [ ] Ne hagyd ki a térközöket a bekezdések között
 
-## 📊 Táblázatok
-
-| Nyelv | Köszönés | Kiejtés |
+| Kifejezés | Kiejtés | Jelentés |
 | :--- | :--- | :--- |
-| Angol | **Hello** | *heló* |
-| Német | **Hallo** | *háló* |
-| Spanyol | **¡Hola!** | *olá* |
-
----
-
-## 💻 Kódblokk & Szövegdoboz
-
-\`\`\`text
-Párbeszéd:
-A: Hello! How can I help you?
-B: I would like a coffee, please.
-\`\`\`
+| **Hello** | *heló* | Szia |
+| **Goodbye** | *gudbáj* | Viszlát |
 `);
 
   const handleCopy = (text: string, index: number) => {
@@ -140,111 +103,51 @@ B: I would like a coffee, please.
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col selection:bg-zinc-100 font-sans">
+    <div className="min-h-screen bg-white text-zinc-900 flex flex-col selection:bg-zinc-100 font-sans">
       <Navbar />
 
-      <main className="max-w-5xl w-full mx-auto p-4 sm:p-8 flex-1 space-y-12">
+      <main className="max-w-4xl w-full mx-auto px-6 py-10 flex-1 space-y-12">
         {/* Header */}
-        <div className="space-y-2 pb-6 border-b border-zinc-200">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
-              Útmutató
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950">
-              Shorra Markdown Dokumentáció & Stílus Útmutató
-            </h1>
-          </div>
-          <p className="text-sm sm:text-base text-zinc-600 max-w-3xl leading-relaxed">
-            Hogyan formázz leckéket és tananyagokat a Shorra rendszerében, hogy azok letisztultan, modern Vercel/shadcn stílusban jelenjenek meg a tanulók számára.
+        <div className="space-y-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+            Shorra Stílus Útmutató
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
+            Markdown Dokumentáció & Sablonok
+          </h1>
+          <p className="text-base text-zinc-600 max-w-2xl leading-relaxed">
+            Minimalista, szegélymentes formázás nagy térközökkel, képekkel és interaktív jelölőkkel a fotón látható stílusban.
           </p>
         </div>
 
-        {/* Quick Rules Section */}
-        <section className="space-y-6">
-          <h2 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-600" />
-            <span>Alapvető Formázási Elemek</span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Box 1: Headings & Structure */}
-            <div className="p-5 bg-white rounded-2xl border border-zinc-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-sm text-zinc-900 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-zinc-600" />
-                <span>1. Címek és Tagolás</span>
-              </h3>
-              <p className="text-xs text-zinc-500">
-                Minden oldal kezdd egy H1 (<code># 1.1 Cím</code>) főcímmel, alatta pedig használj H2 (<code>##</code>) és H3 (<code>###</code>) alcímeket.
-              </p>
-              <pre className="p-3 bg-zinc-950 text-zinc-200 rounded-xl text-xs font-mono overflow-x-auto">
-{`# 1.1 Főcím (Oldal címe)
---- (Vízszintes elválasztó vonal)
-## 🌟 Főbb Fejezet
-### 1. Részlet`}
-              </pre>
+        {/* Feature Highlights matching photo */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-2 p-6 bg-zinc-50 rounded-3xl">
+            <div className="flex items-center gap-2 text-zinc-900 font-bold text-base">
+              <ImageIcon className="w-5 h-5 text-zinc-600" />
+              <span>1. Kép / Illusztráció Doboz</span>
             </div>
-
-            {/* Box 2: Callout Boxes */}
-            <div className="p-5 bg-white rounded-2xl border border-zinc-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-sm text-zinc-900 flex items-center gap-2">
-                <Lightbulb className="w-4 h-4 text-emerald-600" />
-                <span>2. Kiemelt Tipp és Megjegyzés Dobozok</span>
-              </h3>
-              <p className="text-xs text-zinc-500">
-                Használd a GitHub-stílusú alert jelöléseket a fontos tippek, megjegyzések vagy szabályok kiemelésére:
-              </p>
-              <pre className="p-3 bg-zinc-950 text-zinc-200 rounded-xl text-xs font-mono overflow-x-auto">
-{`> [!TIP]
-> Zöld tipp és trükk a tanulónak!
-
-> [!NOTE]
-> Kék megjegyzés és összefüggés.
-
-> [!IMPORTANT]
-> Sárga fontos szabály vagy figyelmeztetés.`}
-              </pre>
-            </div>
-
-            {/* Box 3: Tables */}
-            <div className="p-5 bg-white rounded-2xl border border-zinc-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-sm text-zinc-900 flex items-center gap-2">
-                <Table className="w-4 h-4 text-blue-600" />
-                <span>3. Szótár és Igeragozás Táblázatok</span>
-              </h3>
-              <p className="text-xs text-zinc-500">
-                A táblázatok automatikusan elegáns, árnyékolt szegélyt és fejsort kapnak:
-              </p>
-              <pre className="p-3 bg-zinc-950 text-zinc-200 rounded-xl text-xs font-mono overflow-x-auto">
-{`| Angol szó | Kiejtés | Magyar |
-| :--- | :--- | :--- |
-| **Hello** | *heló* | Szia |
-| **Goodbye** | *gudbáj* | Viszlát |`}
-              </pre>
-            </div>
-
-            {/* Box 4: Interactive Quizzes */}
-            <div className="p-5 bg-white rounded-2xl border border-zinc-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-sm text-zinc-900 flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-amber-600" />
-                <span>4. Interaktív Kvízek és Feladatok</span>
-              </h3>
-              <p className="text-xs text-zinc-500">
-                Használj pipálható feladatlistákat (<code>- [ ]</code> vagy <code>- [x]</code>):
-              </p>
-              <pre className="p-3 bg-zinc-950 text-zinc-200 rounded-xl text-xs font-mono overflow-x-auto">
-{`- [ ] Hibás válasz lehetőség
-- [x] Helyes válasz megoldás`}
-              </pre>
-            </div>
+            <p className="text-xs text-zinc-500">
+              Írj <code>![kép]()</code> vagy <code>![Illusztráció]()</code> szintaxist, és automatikusan elegáns, lekerekített szürke képdoboz jelenik meg.
+            </p>
           </div>
-        </section>
 
-        {/* Copyable Ready-to-use Templates */}
-        <section className="space-y-4">
+          <div className="space-y-2 p-6 bg-zinc-50 rounded-3xl">
+            <div className="flex items-center gap-2 text-zinc-900 font-bold text-base">
+              <ThumbsUp className="w-5 h-5 text-emerald-600" />
+              <span>2. Do this & not this Kiemelők</span>
+            </div>
+            <p className="text-xs text-zinc-500">
+              Használd a <code>## 👍 Do this</code> vagy <code>## 👎 not this</code> fejlécet a zöld és piros kör ikonnal ellátott szakaszokhoz.
+            </p>
+          </div>
+        </div>
+
+        {/* Templates */}
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
-              <FileCode2 className="w-4 h-4 text-zinc-700" />
-              <span>Azonnal Másolható Tananyag Sablonok</span>
+            <h2 className="text-xl font-bold text-zinc-950">
+              Másolható Sablonok
             </h2>
             <Link
               href="/admin"
@@ -255,20 +158,14 @@ B: I would like a coffee, please.
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-6">
             {SAMPLE_TEMPLATES.map((tmpl, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-2xs space-y-3"
-              >
+              <div key={idx} className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-sm text-zinc-950">{tmpl.title}</h3>
-                    <p className="text-xs text-zinc-500">{tmpl.description}</p>
-                  </div>
+                  <h3 className="font-bold text-base text-zinc-900">{tmpl.title}</h3>
                   <button
                     onClick={() => handleCopy(tmpl.markdown, idx)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 text-xs font-semibold text-zinc-700 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200 text-xs font-semibold text-zinc-800 transition-colors"
                   >
                     {copiedIndex === idx ? (
                       <>
@@ -278,55 +175,48 @@ B: I would like a coffee, please.
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5" />
-                        <span>Sablon Másolása</span>
+                        <span>Másolás</span>
                       </>
                     )}
                   </button>
                 </div>
-                <pre className="p-3.5 bg-zinc-950 text-zinc-200 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed max-h-48">
+                <pre className="p-4 bg-zinc-950 text-zinc-200 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed">
                   {tmpl.markdown}
                 </pre>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* Live Interactive Markdown Playground */}
-        <section className="space-y-4 pt-4 border-t border-zinc-200">
-          <div>
-            <h2 className="text-lg font-bold text-zinc-900 flex items-center gap-2">
-              <Eye className="w-4 h-4 text-emerald-600" />
-              <span>Interaktív Élő Markdown Próba & Előnézet</span>
-            </h2>
-            <p className="text-xs text-zinc-500 mt-0.5">
-              Gépelj a bal oldali mezőbe, és a jobb oldalon azonnal látod, hogyan jelenik majd meg a Shorra tanulói felületén!
-            </p>
-          </div>
+        {/* Live Playground */}
+        <div className="space-y-4 pt-6 border-t border-zinc-100">
+          <h2 className="text-xl font-bold text-zinc-950 flex items-center gap-2">
+            <Eye className="w-5 h-5 text-emerald-600" />
+            <span>Interaktív Élő Markdown Próba</span>
+          </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            {/* Input Editor */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div className="space-y-2">
-              <span className="text-xs font-bold text-zinc-600 block">Markdown Forráskód:</span>
+              <span className="text-xs font-bold text-zinc-500 block">Szerkesztő:</span>
               <Textarea
                 value={playgroundText}
                 onChange={(e) => setPlaygroundText(e.target.value)}
-                rows={16}
-                className="font-mono text-xs sm:text-sm bg-white border-zinc-200 rounded-2xl p-4 leading-relaxed shadow-2xs focus:ring-1 focus:ring-zinc-400"
+                rows={18}
+                className="font-mono text-xs sm:text-sm bg-zinc-50 border-0 rounded-2xl p-4 leading-relaxed focus:ring-1 focus:ring-zinc-400"
               />
             </div>
 
-            {/* Live Render Output */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-emerald-700 block flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Shorra Renderelt Eredmény:</span>
+                <Sparkles className="w-4 h-4" />
+                <span>Renderelt Eredmény (Tágas, Szegélymentes):</span>
               </span>
-              <div className="p-6 bg-white border border-zinc-200 rounded-2xl shadow-2xs min-h-[350px] max-h-[460px] overflow-y-auto">
+              <div className="p-4 bg-white min-h-[350px]">
                 <MarkdownRenderer content={playgroundText} />
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </main>
     </div>
   );

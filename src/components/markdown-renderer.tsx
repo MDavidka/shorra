@@ -3,7 +3,18 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Check, Copy, Info, Lightbulb, AlertTriangle, AlertCircle, Sparkles } from "lucide-react";
+import {
+  Check,
+  Copy,
+  Info,
+  Lightbulb,
+  AlertTriangle,
+  ThumbsUp,
+  ThumbsDown,
+  CheckCircle2,
+  Circle,
+  ImageIcon,
+} from "lucide-react";
 
 interface MarkdownRendererProps {
   content: string;
@@ -12,68 +23,120 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
   return (
-    <div className={`prose prose-zinc max-w-none text-zinc-800 leading-relaxed ${className}`}>
+    <div className={`prose prose-zinc max-w-none text-zinc-900 leading-relaxed font-sans ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 pb-2 mb-4 border-b border-zinc-100">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 mt-2 mb-6">
               {children}
             </h1>
           ),
-          h2: ({ children }) => (
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 mt-6 mb-3">
-              {children}
-            </h2>
-          ),
+          h2: ({ children }) => {
+            const text = String(children);
+            if (text.includes("Do this") || text.includes("Helyes")) {
+              return (
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 mt-8 mb-4 flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-600 text-white shrink-0">
+                    <ThumbsUp className="w-4 h-4 fill-white" />
+                  </span>
+                  <span>{children}</span>
+                </h2>
+              );
+            }
+            if (text.includes("not this") || text.includes("Helytelen") || text.includes("Ne tedd")) {
+              return (
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 mt-8 mb-4 flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-600 text-white shrink-0">
+                    <ThumbsDown className="w-4 h-4 fill-white" />
+                  </span>
+                  <span>{children}</span>
+                </h2>
+              );
+            }
+            return (
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 mt-8 mb-4">
+                {children}
+              </h2>
+            );
+          },
           h3: ({ children }) => (
-            <h3 className="text-lg font-semibold text-zinc-900 mt-5 mb-2">
+            <h3 className="text-lg sm:text-xl font-bold text-zinc-900 mt-6 mb-3">
               {children}
             </h3>
           ),
           p: ({ children }) => (
-            <p className="text-sm sm:text-base text-zinc-700 leading-relaxed mb-3">
+            <p className="text-base sm:text-lg text-zinc-700 leading-relaxed mb-6 font-normal">
               {children}
             </p>
           ),
-          hr: () => <hr className="my-6 border-zinc-200" />,
+          hr: () => <div className="my-8 h-px bg-zinc-100" />,
           ul: ({ children }) => (
-            <ul className="list-disc pl-5 my-3 space-y-1.5 text-sm sm:text-base text-zinc-700">
+            <ul className="my-4 space-y-3 pl-1 text-base sm:text-lg text-zinc-800 list-none">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal pl-5 my-3 space-y-1.5 text-sm sm:text-base text-zinc-700">
+            <ol className="list-decimal pl-6 my-4 space-y-3 text-base sm:text-lg text-zinc-800">
               {children}
             </ol>
           ),
-          li: ({ children }) => (
-            <li className="leading-relaxed">{children}</li>
+          li: ({ children, checked, ...props }: any) => {
+            if (checked !== undefined && checked !== null) {
+              return (
+                <li className="flex items-start gap-3 my-2 text-base sm:text-lg text-zinc-800 leading-relaxed list-none">
+                  <span
+                    className={`mt-1 flex items-center justify-center w-5 h-5 rounded-md transition-colors shrink-0 ${
+                      checked
+                        ? "bg-blue-600 text-white"
+                        : "border-2 border-zinc-300 bg-white"
+                    }`}
+                  >
+                    {checked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </span>
+                  <span className={checked ? "line-through text-zinc-400" : "text-zinc-800"}>
+                    {children}
+                  </span>
+                </li>
+              );
+            }
+            return (
+              <li className="flex items-start gap-2.5 leading-relaxed">
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 mt-2.5 shrink-0" />
+                <div className="flex-1">{children}</div>
+              </li>
+            );
+          },
+          img: ({ src, alt }: any) => (
+            <div className="my-8 w-full bg-[#f1f2f4] rounded-3xl p-10 sm:p-14 flex flex-col items-center justify-center text-center shadow-none min-h-[160px]">
+              <span className="text-2xl sm:text-3xl font-medium text-zinc-800 tracking-tight">
+                {alt || "kép"}
+              </span>
+            </div>
           ),
           table: ({ children }) => (
-            <div className="w-full overflow-x-auto my-4 rounded-xl border border-zinc-200 shadow-2xs">
-              <table className="w-full text-left text-sm border-collapse">
+            <div className="w-full overflow-x-auto my-8">
+              <table className="w-full text-left text-sm sm:text-base border-collapse">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-zinc-50 border-b border-zinc-200 text-zinc-900 font-semibold">
+            <thead className="border-b border-zinc-200/80 text-zinc-900 font-bold">
               {children}
             </thead>
           ),
           th: ({ children }) => (
-            <th className="p-3 font-semibold text-xs uppercase tracking-wider text-zinc-600">
+            <th className="py-3 px-4 font-bold text-xs uppercase tracking-wider text-zinc-500">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="p-3 border-b border-zinc-100 text-zinc-700 text-sm">
+            <td className="py-3.5 px-4 border-b border-zinc-100 text-zinc-700">
               {children}
             </td>
           ),
           blockquote: ({ children }) => {
-            // Check if this is a GitHub style alert (> [!TIP], > [!NOTE], etc.)
             const textContent = React.Children.toArray(children)
               .map((c: any) => (typeof c === "string" ? c : c?.props?.children || ""))
               .flat()
@@ -81,10 +144,10 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
 
             if (textContent.includes("[!TIP]")) {
               return (
-                <div className="my-4 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4 text-emerald-950 flex gap-3 shadow-2xs">
+                <div className="my-6 rounded-2xl bg-emerald-50/70 p-5 text-emerald-950 flex gap-3.5">
                   <Lightbulb className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div className="text-sm leading-relaxed">
-                    <span className="font-semibold text-emerald-800 block mb-0.5">Tipp:</span>
+                  <div className="text-sm sm:text-base leading-relaxed">
+                    <span className="font-bold text-emerald-900 block mb-1">Tipp</span>
                     {removeAlertTag(children, "[!TIP]")}
                   </div>
                 </div>
@@ -92,10 +155,10 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
             }
             if (textContent.includes("[!NOTE]")) {
               return (
-                <div className="my-4 rounded-xl border border-blue-200/80 bg-blue-50/40 p-4 text-blue-950 flex gap-3 shadow-2xs">
+                <div className="my-6 rounded-2xl bg-blue-50/70 p-5 text-blue-950 flex gap-3.5">
                   <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                  <div className="text-sm leading-relaxed">
-                    <span className="font-semibold text-blue-800 block mb-0.5">Megjegyzés:</span>
+                  <div className="text-sm sm:text-base leading-relaxed">
+                    <span className="font-bold text-blue-900 block mb-1">Megjegyzés</span>
                     {removeAlertTag(children, "[!NOTE]")}
                   </div>
                 </div>
@@ -103,10 +166,10 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
             }
             if (textContent.includes("[!IMPORTANT]") || textContent.includes("[!WARNING]")) {
               return (
-                <div className="my-4 rounded-xl border border-amber-200/80 bg-amber-50/40 p-4 text-amber-950 flex gap-3 shadow-2xs">
+                <div className="my-6 rounded-2xl bg-amber-50/70 p-5 text-amber-950 flex gap-3.5">
                   <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                  <div className="text-sm leading-relaxed">
-                    <span className="font-semibold text-amber-800 block mb-0.5">Fontos:</span>
+                  <div className="text-sm sm:text-base leading-relaxed">
+                    <span className="font-bold text-amber-900 block mb-1">Fontos</span>
                     {removeAlertTag(children, "[!IMPORTANT]", "[!WARNING]")}
                   </div>
                 </div>
@@ -114,7 +177,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
             }
 
             return (
-              <blockquote className="border-l-4 border-zinc-300 pl-4 py-1 my-3 italic text-zinc-600 text-sm sm:text-base bg-zinc-50/50 rounded-r-lg">
+              <blockquote className="border-l-2 border-zinc-300 pl-4 py-1 my-5 text-zinc-600 text-base sm:text-lg">
                 {children}
               </blockquote>
             );
@@ -123,7 +186,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
             const isInline = !className && typeof children === "string" && !children.includes("\n");
             if (isInline) {
               return (
-                <code className="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-mono font-medium text-zinc-900 border border-zinc-200/60">
+                <code className="rounded-md bg-zinc-100 px-1.5 py-0.5 text-xs font-mono font-medium text-zinc-900">
                   {children}
                 </code>
               );
@@ -166,8 +229,8 @@ function CodeBlock({ language, children }: { language?: string; children: string
   };
 
   return (
-    <div className="relative my-4 rounded-xl border border-zinc-200/90 bg-zinc-950 text-zinc-100 overflow-hidden text-xs sm:text-sm font-mono shadow-2xs">
-      <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900 border-b border-zinc-800 text-zinc-400 text-xs">
+    <div className="relative my-6 rounded-2xl bg-zinc-950 text-zinc-100 overflow-hidden text-xs sm:text-sm font-mono">
+      <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 text-zinc-400 text-xs">
         <span className="uppercase tracking-wider font-semibold">{language || "Code"}</span>
         <button
           onClick={handleCopy}
@@ -187,7 +250,7 @@ function CodeBlock({ language, children }: { language?: string; children: string
           )}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto leading-relaxed">
+      <pre className="p-4 sm:p-5 overflow-x-auto leading-relaxed">
         <code>{children}</code>
       </pre>
     </div>

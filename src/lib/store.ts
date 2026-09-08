@@ -2,7 +2,7 @@
 
 import { LanguageCourse, Lesson, LessonPage } from "./types";
 
-const STORAGE_COURSES_KEY = "shorra_courses_v1";
+const STORAGE_COURSES_KEY = "shorra_courses_v2";
 const STORAGE_COMPLETED_KEY = "shorra_completed_pages_v1";
 
 export const INITIAL_COURSES: LanguageCourse[] = [
@@ -18,129 +18,63 @@ export const INITIAL_COURSES: LanguageCourse[] = [
         id: "lesson-1",
         languageId: "angol",
         lessonNumber: 1,
-        title: "Alapvető Köszönések & Bemutatkozás",
+        title: "Alapok & Bevezetés",
         icon: "sparkles",
         level: "A1 Kezdő",
-        description: "Tanuld meg a legfontosabb üdvözlési formákat és a magabiztos bemutatkozást angolul.",
+        description: "Tanuld meg a Markdown formázást és az alapvető angol kifejezéseket.",
         pages: [
           {
             id: "page-1-1",
             lessonId: "lesson-1",
             pageNumber: "1.1",
-            title: "Bevezetés és Alapvető Köszönések",
+            title: "Cím & Alapok",
             icon: "sparkles",
-            durationMinutes: 4,
-            markdownContent: `# 1.1 Bevezetés és Alapvető Köszönések
+            durationMinutes: 3,
+            markdownContent: `# Cím
 
-Üdvözlünk a **Shorra Angol** kurzusán! Ebben a leckében megtanulod a leggyakoribb angol köszönési formákat.
+Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
----
+![kép]()
 
-## 🌟 Napszakok szerinti üdvözlések
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
+- [ ] Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formázni és strukturálni
 
-Az angolban a köszönések nagyban függnek a napszaktól és a formalitástól:
+## 👍 Do this
 
-| Angol kifejezés | Kiejtés (kb.) | Magyar jelentés | Mikor használjuk? |
-| :--- | :--- | :--- | :--- |
-| **Good morning** | *gud morn-ing* | Jó reggelt! | Reggeltől délig (12:00-ig) |
-| **Good afternoon** | *gud af-ter-nun* | Jó napot! | Déltől kb. 18:00-ig |
-| **Good evening** | *gud iv-ning* | Jó estét! | 18:00 után |
-| **Good night** | *gud nájt* | Jó éjszakát! | **Csak búcsúzáskor!** |
+- [x] Használj tiszta, átlátható bekezdéseket és elegendő térközt
+- [x] Emeld ki a fontos kifejezéseket **félkövérrel**
 
-> [!TIP]
-> A **Good night** sosem üdvözlés találkozáskor, hanem mindig búcsúzás lefekvés előtt vagy este hazainduláskor!
+## 👎 not this
 
----
+- [ ] Ne zsúfold össze a szövegeket túl sok szegéllyel
+- [ ] Ne használj túl sűrű táblázatokat magyarázat nélkül
 
-## 💬 Hétköznapi & Baráti köszönések
-
-- **Hello!** – Univerzális, bárhol használható.
-- **Hi!** – Barátságos, kötetlen ("Szia!").
-- **Hey!** – Nagyon közvetlen ("Hali!").
-- **How are you?** – Hogy vagy?
-- **How's it going?** – Hogy mennek a dolgok?
-
-> [!NOTE]
-> Ha valaki azt kérdezi: *“How are you?”*, a legtermészetesebb válasz:
-> *“I'm good, thank you! And you?”* vagy *“Not bad, thanks!”*
+| Kifejezés | Kiejtés | Jelentés |
+| :--- | :--- | :--- |
+| **Hello** | *heló* | Szia / Üdvözlöm |
+| **Good morning** | *gud morning* | Jó reggelt |
+| **Thank you** | *thenk ju* | Köszönöm |
 `,
           },
           {
             id: "page-1-2",
             lessonId: "lesson-1",
             pageNumber: "1.2",
-            title: "Bemutatkozás és Névadás",
+            title: "Köszönések & Napszakok",
             icon: "message-circle",
-            durationMinutes: 5,
-            markdownContent: `# 1.2 Bemutatkozás és Névadás
+            durationMinutes: 4,
+            markdownContent: `# 👋 Welcome to Shorra!
 
-Ismerkedj meg azzal, hogyan mutatkozhatsz be udvariasan és magabiztosan!
+Kezdd el az angol tanulást könnyedén és magabiztosan!
 
----
+- [x] Hozz létre saját profilt a kezdőlapon
+- [ ] Tanuld meg az alapvető napszaki köszönéseket
+- [ ] Gyakorold a kiejtést a minták alapján
 
-## 👤 Név elmondása
+![Napszaki köszöntések]()
 
-Két alapvető formula létezik a bemutatkozásra:
-
-1. **"My name is [Név]."** *(A nevem ...)*
-   - *Példa:* "My name is David."
-2. **"I am [Név]."** vagy rövidítve **"I'm [Név]."** *(... vagyok)*
-   - *Példa:* "I'm David. Nice to meet you!"
-
----
-
-## ❓ Hogyan kérdezzük meg a másik nevét?
-
-> **"What is your name?"**  
-> *(Hogy hívnak? / Mi a neved?)*
-
-Gyakori kötetlen kiejtésben összevonva hallod:
-\`What's your name?\`
-
----
-
-## 🤝 Udvarias fordulatok találkozáskor
-
-- **Nice to meet you!** – Örülök a találkozásnak!
-- **Pleased to meet you.** – Nagyon örvendek (kissé formálisabb).
-- **It's a pleasure.** – Örömömre szolgál.
-
-\`\`\`text
-Párbeszéd minta:
-A: Hello, I'm Sarah! What's your name?
-B: Hi Sarah, my name is Alex. Nice to meet you!
-A: Nice to meet you too, Alex!
-\`\`\`
-`,
-          },
-          {
-            id: "page-1-3",
-            lessonId: "lesson-1",
-            pageNumber: "1.3",
-            title: "Gyakorló Kvíz & Ellenőrzés",
-            icon: "pen-tool",
-            durationMinutes: 3,
-            markdownContent: `# 1.3 Gyakorló Kvíz & Ellenőrzés
-
-Tedd próbára a tudásodat az alábbi interaktív feladatokkal!
-
----
-
-### 📝 1. Feladat: Válaszd ki a helyes kifejezést!
-
-- [ ] Találkozáskor este 20:00-kor: **Good night!**
-- [x] Találkozáskor este 20:00-kor: **Good evening!**
-
----
-
-### 🎯 2. Feladat: Töltsd ki a hiányzó szavakat!
-
-1. *"Hi, my _______ is Dávid."* ➔ \`name\`
-2. *"Nice to _______ you!"* ➔ \`meet\`
-3. *"Good _______! (14:00-kor)"* ➔ \`afternoon\`
-
-> [!IMPORTANT]
-> Gratulálunk! Ha elértél a lecke végére, kattints alul a **"Lecke teljesítése"** gombra a Shorra pontok és a zöld pipa megszerzéséhez!
+> [!TIP]
+> A **Good morning** reggeltől délig, a **Good afternoon** délután, a **Good night** pedig kizárólag este búcsúzáskor használatos!
 `,
           },
         ],
@@ -149,55 +83,29 @@ Tedd próbára a tudásodat az alábbi interaktív feladatokkal!
         id: "lesson-2",
         languageId: "angol",
         lessonNumber: 2,
-        title: "Kérdések & Mindennapi Szituációk",
+        title: "Mindennapi Kérdések & Párbeszédek",
         icon: "book-open",
         level: "A1-A2",
-        description: "Kérdőszavak használata (Who, What, Where, When, Why, How) és útbaigazítás.",
+        description: "Kérdőszavak és udvarias kifejezések kávézóban vagy utcán.",
         pages: [
           {
             id: "page-2-1",
             lessonId: "lesson-2",
             pageNumber: "2.1",
-            title: "Az 5W + 1H Kérdőszavak",
+            title: "Az 5W Kérdőszavak",
             icon: "help-circle",
-            durationMinutes: 6,
-            markdownContent: `# 2.1 Az 5W + 1H Kérdőszavak
+            durationMinutes: 5,
+            markdownContent: `# 2.1 Kérdőszavak mesterfokon
 
-Az angol kérdések gerincét az úgynevezett **WH-kérdőszavak** alkotják.
+A legfontosabb kérdések az angolban:
 
 | Kérdőszó | Jelentés | Példamondat |
 | :--- | :--- | :--- |
-| **What** | Mi? / Mit? | *What is this?* (Mi ez?) |
-| **Where** | Hol? / Hová? | *Where are you from?* (Honnan származol?) |
-| **When** | Mikor? | *When does it start?* (Mikor kezdődik?) |
-| **Who** | Ki? / Kit? | *Who is that?* (Ki az?) |
-| **Why** | Miért? | *Why are you learning English?* (Miért tanulsz angolul?) |
-| **How** | Hogyan? / Mennyire? | *How do you say this?* (Hogyan mondod ezt?) |
-
-> [!TIP]
-> Figyeld meg a szórendet: **Kérdőszó + Segédige + Alany + Főige**  
-> Példa: *Where (kérdőszó) do (segédige) you (alany) live (főige)?*
-`,
-          },
-          {
-            id: "page-2-2",
-            lessonId: "lesson-2",
-            pageNumber: "2.2",
-            title: "Útbaigazítás & Kávézóban rendelés",
-            icon: "compass",
-            durationMinutes: 5,
-            markdownContent: `# 2.2 Útbaigazítás & Rendelés
-
-Hogyan boldogulj külföldön egy kávézóban vagy az utcán!
-
-### ☕ Rendelés egy kávézóban:
-- *"Can I have a cappuccino, please?"* (Kérhetnék egy cappuccinót?)
-- *"To go or for here?"* (Elvitelre vagy itt fogyasztásra?)
-- *"How much is it?"* (Mennyibe kerül?)
-
-### 🗺️ Útbaigazítás kérése:
-- *"Excuse me, where is the nearest station?"* (Elnézést, hol van a legközelebbi állomás?)
-- *"Go straight ahead, then turn right."* (Menjen egyenesen, majd forduljon jobbra.)
+| **What** | Mi? / Mit? | *What is your name?* |
+| **Where** | Hol? / Hová? | *Where are you from?* |
+| **When** | Mikor? | *When does it start?* |
+| **Who** | Ki? / Kit? | *Who is that?* |
+| **Why** | Miért? | *Why are you learning?* |
 `,
           },
         ],
@@ -210,7 +118,7 @@ Hogyan boldogulj külföldön egy kávézóban vagy az utcán!
     flag: "🇩🇪",
     flagType: "de",
     levelText: "3Levél 🍃",
-    description: "Német nyelv alapjai könnyedén és logikusan.",
+    description: "Német nyelv alapjai könnyedén.",
     lessons: [
       {
         id: "lesson-de-1",
@@ -235,45 +143,7 @@ Német üdvözlések alapjai:
 - **Hallo!** – Szia!
 - **Guten Morgen!** – Jó reggelt!
 - **Guten Tag!** – Jó napot!
-- **Guten Abend!** – Jó estét!
-- **Auf Wiedersehen!** – Viszontlátásra!
 - **Tschüss!** – Szia (búcsúzáskor).
-`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "spanyol",
-    name: "Spanyol",
-    flag: "🇪🇸",
-    flagType: "es",
-    levelText: "4Levél 🍃",
-    description: "Élénk és dinamikus spanyol társalgás.",
-    lessons: [
-      {
-        id: "lesson-es-1",
-        languageId: "spanyol",
-        lessonNumber: 1,
-        title: "¡Hola! y Saludos",
-        icon: "sparkles",
-        level: "A1 Kezdő",
-        description: "Spanyol köszöntések és bemutatkozás.",
-        pages: [
-          {
-            id: "page-es-1-1",
-            lessonId: "lesson-es-1",
-            pageNumber: "1.1",
-            title: "Saludos Básicos",
-            icon: "sparkles",
-            durationMinutes: 3,
-            markdownContent: `# 1.1 Saludos Básicos
-
-- **¡Hola!** – Szia!
-- **¡Buenos días!** – Jó reggelt / Jó napot!
-- **¿Cómo estás?** – Hogy vagy?
-- **Muy bien, gracias.** – Nagyon jól, köszönöm.
 `,
           },
         ],
