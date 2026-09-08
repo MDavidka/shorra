@@ -17,6 +17,7 @@ import { LanguageCourse, Lesson, LessonPage } from "@/lib/types";
 import { RenderIcon } from "@/lib/icons";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { togglePageCompleted, getCompletedPageIds } from "@/lib/store";
+import { AIInput } from "@/components/ui/ai-input";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -113,9 +114,9 @@ export function LessonmarkView({
   }
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 flex flex-col selection:bg-zinc-100 font-sans">
+    <div className="min-h-screen bg-white text-zinc-900 flex flex-col selection:bg-zinc-100 font-sans max-w-xl mx-auto">
       {/* Top Header */}
-      <header className="w-full max-w-xl mx-auto px-6 pt-8 pb-3 flex items-center justify-between">
+      <header className="w-full px-6 pt-8 pb-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToDashboard}
@@ -170,7 +171,7 @@ export function LessonmarkView({
       </header>
 
       {/* Active Breadcrumb: Otthon > Nyelvek > Angol > Lecke */}
-      <div className="w-full max-w-xl mx-auto px-6 pb-4">
+      <div className="w-full px-6 pb-4">
         <Breadcrumb>
           <BreadcrumbList className="text-xs text-zinc-400">
             <BreadcrumbItem>
@@ -210,14 +211,14 @@ export function LessonmarkView({
       </div>
 
       {/* Main Spacious Content */}
-      <main className="w-full max-w-xl mx-auto px-6 py-2 flex-1 flex flex-col justify-between">
+      <main className="w-full px-6 py-2 flex-1 flex flex-col justify-between">
         <div className="space-y-6">
           {/* Markdown Content of Active Page */}
           <MarkdownRenderer content={currentPage.markdownContent} />
         </div>
 
         {/* Bottom Navigation Controls */}
-        <div className="mt-16 pt-8 pb-10 flex items-center justify-between gap-4">
+        <div className="mt-12 pt-8 pb-4 flex items-center justify-between gap-4">
           <button
             onClick={handlePrevPage}
             disabled={activePageIndex === 0}
@@ -269,6 +270,15 @@ export function LessonmarkView({
               <span>Vége</span>
             </button>
           )}
+        </div>
+
+        {/* Site-wide MCP Assistant for Page Content Explanation */}
+        <div className="pt-6 pb-6 border-t border-zinc-100">
+          <AIInput
+            placeholder="Kérdezz bármit erről az oldalról..."
+            pageContext={currentPage.markdownContent}
+            language={course.name}
+          />
         </div>
       </main>
 
