@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Mic, ArrowUp, ChevronDown, X, Sparkles } from "lucide-react";
+import { Plus, Mic, ArrowUp, ChevronDown, Sparkles } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,21 +31,9 @@ export function AIInput({
   className = "",
 }: AIInputProps) {
   const [value, setValue] = React.useState("");
-  const [model, setModel] = React.useState("Nemotron 3.5");
-  const [messages, setMessages] = React.useState<ChatMessage[]>([
-    // Sample initial state matching screenshot
-    {
-      id: "demo-user",
-      sender: "user",
-      text: "Hey! How do we say hello in english",
-    },
-    {
-      id: "demo-mascot",
-      sender: "mascot",
-      text: "its is hello",
-    },
-  ]);
-  const [showChatHistory, setShowChatHistory] = React.useState(true);
+  const [model, setModel] = React.useState("DeepSeek V4 Pro");
+  // Empty initial state - do NOT show a pre-message when no message has been sent
+  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSend = async () => {
@@ -60,7 +48,6 @@ export function AIInput({
 
     setMessages((prev) => [...prev, userMsg]);
     setValue("");
-    setShowChatHistory(true);
     setIsLoading(true);
     onSend?.(query);
 
@@ -105,7 +92,6 @@ export function AIInput({
     }
   };
 
-  // Render message text with highlighted words (matching screenshot: "its is [hello]")
   const renderMascotText = (text: string) => {
     const parts = text.split(/(`[^`]+`|\bhello\b|\bhi\b)/gi);
     return parts.map((part, i) => {
@@ -131,10 +117,10 @@ export function AIInput({
 
   return (
     <div className={`w-full flex flex-col items-center space-y-4 ${className}`}>
-      {/* Floating Chat Bubbles Area (Exact match to uploaded screenshot) */}
-      {showChatHistory && messages.length > 0 && (
+      {/* Chat Bubbles: Only displayed if there are actual messages sent */}
+      {messages.length > 0 && (
         <div className="w-full space-y-4 px-2 animate-in fade-in duration-200">
-          {messages.slice(-2).map((msg) => {
+          {messages.map((msg) => {
             if (msg.sender === "user") {
               return (
                 <div key={msg.id} className="flex justify-end w-full">
@@ -147,13 +133,13 @@ export function AIInput({
 
             return (
               <div key={msg.id} className="flex items-center gap-3 justify-start w-full">
-                {/* Green Mascot Icon Avatar (Matches Screenshot) */}
+                {/* Green Mascot Icon Avatar */}
                 <div className="w-7 h-7 bg-[#34a853] rounded-lg flex items-center justify-center gap-0.5 shrink-0 shadow-2xs">
                   <span className="w-1 h-2 bg-[#1b5e20] rounded-full inline-block" />
                   <span className="w-1 h-2 bg-[#1b5e20] rounded-full inline-block" />
                 </div>
 
-                {/* Mascot Answer (Matches: "its is [hello]") */}
+                {/* Mascot Answer */}
                 <div className="text-sm sm:text-base text-zinc-900 font-normal leading-snug">
                   {renderMascotText(msg.text)}
                 </div>
@@ -167,7 +153,7 @@ export function AIInput({
                 <span className="w-1 h-2 bg-[#1b5e20] rounded-full inline-block" />
                 <span className="w-1 h-2 bg-[#1b5e20] rounded-full inline-block" />
               </div>
-              <span className="text-xs text-zinc-400">Nemotron 3.5 válaszol...</span>
+              <span className="text-xs text-zinc-400">DeepSeek gondolkodik...</span>
             </div>
           )}
         </div>
@@ -195,31 +181,19 @@ export function AIInput({
           className="flex-1 bg-transparent px-3 text-[16px] sm:text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none min-w-0"
         />
 
-        {/* Model Selector and actions */}
+        {/* Model Selector */}
         <div className="flex items-center gap-1 shrink-0">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 rounded-full hover:bg-zinc-100 transition-colors cursor-pointer outline-none">
               <span>{model}</span>
               <ChevronDown className="h-3 w-3 opacity-60" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 rounded-2xl p-1 shadow-lg border-zinc-200">
+            <DropdownMenuContent align="end" className="w-56 rounded-2xl p-1 shadow-lg border-zinc-200">
               <DropdownMenuItem
-                onClick={() => setModel("Nemotron 3.5")}
+                onClick={() => setModel("DeepSeek V4 Pro")}
                 className="cursor-pointer rounded-xl font-medium"
               >
-                Nemotron 3.5 Lightning
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setModel("Nemotron 4 340B")}
-                className="cursor-pointer rounded-xl font-medium"
-              >
-                Nemotron 4 340B
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setModel("Llama 3.3 70B")}
-                className="cursor-pointer rounded-xl font-medium"
-              >
-                Llama 3.3 70B
+                DeepSeek V4 Pro (Free)
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

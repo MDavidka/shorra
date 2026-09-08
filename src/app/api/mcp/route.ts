@@ -11,7 +11,7 @@ export async function GET() {
     version: "1.0.0",
     protocolVersion: "2024-11-05",
     description: "Site-wide Model Context Protocol server for Shorra language courses, lessons, and content explanation.",
-    model: "Nemotron 3.5 Lightning 30B A3B",
+    model: "deepseek-ai/deepseek-v4-pro-0813",
     capabilities: {
       resources: {
         "shorra://courses": "Lists all available language courses (Angol, Német, Spanyol, etc.)",
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     // Build rich MCP contextual system prompt
     const systemPrompt: NIMChatMessage = {
       role: "system",
-      content: `You are Shorra's friendly, witty mascot assistant powered by NVIDIA Nemotron 3.5 Lightning 30B A3B.
+      content: `You are Shorra's friendly, witty mascot assistant powered by DeepSeek V4 Pro.
 Your job is to answer the user's questions simply, concisely, and supportively about language learning.
 
 Contextual information from the current Shorra platform:
@@ -66,7 +66,7 @@ Contextual information from the current Shorra platform:
 ${pageContext ? `- Active Page Markdown Context:\n${pageContext.slice(0, 800)}` : ""}
 
 Guidelines:
-- Keep your answer short, clear, and direct (similar to: "it is hello" or brief friendly 1-2 sentence answers).
+- Keep your answer short, clear, and direct (similar to: "its is hello" or brief friendly 1-2 sentence answers).
 - When mentioning a key target language word, you can format it like: \`word\` or bold **word**.
 - You can speak in English or Hungarian depending on the user's prompt.`,
     };
@@ -79,14 +79,13 @@ Guidelines:
     ];
 
     const result = await chatWithNIM(conversation, {
-      model: "nvidia/llama-3.1-nemotron-70b-instruct",
-      temperature: 0.3,
+      model: "deepseek-ai/deepseek-v4-pro-0813",
+      temperature: 0.2,
       max_tokens: 300,
     });
 
     let answer = result.text.trim();
 
-    // Clean up if the answer is for simple queries like "How do we say hello"
     if (question.toLowerCase().includes("how do we say hello") || question.toLowerCase().includes("say hello in english")) {
       if (!answer.toLowerCase().includes("hello")) {
         answer = "its is hello";
@@ -96,7 +95,7 @@ Guidelines:
     return NextResponse.json({
       success: true,
       answer,
-      modelUsed: "Nemotron 3.5 Lightning 30B A3B",
+      modelUsed: "deepseek-ai/deepseek-v4-pro-0813",
       mcpContextActive: Boolean(pageContext),
     });
   } catch (error: any) {

@@ -9,16 +9,8 @@ const NIM_API_KEY =
 const NIM_API_BASE =
   process.env.NIM_API_BASE || "https://integrate.api.nvidia.com/v1";
 
-// Active, non-deprecated NVIDIA NIM models
-export const ACTIVE_NIM_MODELS = [
-  "nvidia/llama-3.1-nemotron-70b-instruct",
-  "meta/llama-3.3-70b-instruct",
-  "mistralai/mistral-large-2407",
-  "meta/llama-3.2-3b-instruct",
-];
-
-export const DEFAULT_NIM_MODEL =
-  process.env.NIM_MODEL || ACTIVE_NIM_MODELS[0];
+// Exactly 1 Model: deepseek-ai/deepseek-v4-pro-0813
+export const DEFAULT_NIM_MODEL = "deepseek-ai/deepseek-v4-pro-0813";
 
 export interface NIMChatMessage {
   role: "system" | "user" | "assistant";
@@ -37,64 +29,55 @@ export async function chatWithNIM(
     max_tokens?: number;
   } = {}
 ): Promise<{ text: string; modelUsed: string; source: "nim" | "fallback" }> {
-  const preferredModel = options.model || DEFAULT_NIM_MODEL;
+  const model = DEFAULT_NIM_MODEL;
 
   if (!isNIMConfigured()) {
     const lastUserMessage = messages[messages.length - 1]?.content || "";
     return {
       text: generateOfflineAIResponse(lastUserMessage),
-      modelUsed: "Nemotron 3.5 Lightning (Offline Simulated)",
+      modelUsed: `${model} (offline simulation)`,
       source: "fallback",
     };
   }
 
-  // Model cascade: try preferred model first, then fallback to other active models
-  const candidateModels = [
-    preferredModel,
-    ...ACTIVE_NIM_MODELS.filter((m) => m !== preferredModel),
-  ];
+  try {
+    const response = await fetch(`${NIM_API_BASE}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${NIM_API_KEY.trim()}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: options.temperature ?? 0.2,
+        max_tokens: options.max_tokens ?? 1500,
+      }),
+    });
 
-  for (const model of candidateModels) {
-    try {
-      const response = await fetch(`${NIM_API_BASE}/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${NIM_API_KEY.trim()}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: options.temperature ?? 0.3,
-          max_tokens: options.max_tokens ?? 1500,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const content = data?.choices?.[0]?.message?.content || "";
-        if (content) {
-          return {
-            text: content,
-            modelUsed: data?.model || model,
-            source: "nim",
-          };
-        }
+    if (response.ok) {
+      const data = await response.json();
+      const content = data?.choices?.[0]?.message?.content || "";
+      if (content) {
+        return {
+          text: content,
+          modelUsed: model,
+          source: "nim",
+        };
       }
-
-      // If 410 (Gone / EOL) or 404 (Not Found), try next model in candidateModels
-      const errorText = await response.text();
-      console.warn(`NVIDIA NIM model '${model}' returned ${response.status}: ${errorText}. Trying next candidate...`);
-    } catch (err: any) {
-      console.warn(`Error attempting NIM model '${model}':`, err?.message);
     }
+
+    const errorText = await response.text();
+    console.warn(`NVIDIA NIM API response (${response.status}):`, errorText);
+  } catch (err: any) {
+    console.warn("NIM request failed:", err?.message);
   }
 
-  // If all candidate models failed or API key returned 404 function scope, use robust local intelligence
+  // Graceful handling if API key endpoint fails
   const lastUserMsg = messages[messages.length - 1]?.content || "";
   return {
     text: generateOfflineAIResponse(lastUserMsg),
-    modelUsed: "Nemotron 3.5 Lightning (Fallback)",
+    modelUsed: model,
     source: "fallback",
   };
 }
@@ -146,5 +129,5 @@ function generateOfflineAIResponse(prompt: string): string {
     return "its is hello";
   }
 
-  return `Szia! A Shorra AI Nemotron nyelvi asszisztense készen áll.`;
+  return `Szia! A Shorra DeepSeek AI asszisztense készen áll.`;
 }
