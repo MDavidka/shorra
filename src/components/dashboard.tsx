@@ -12,7 +12,6 @@ import {
   BookOpen,
   HelpCircle,
   PenTool,
-  Sparkles,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -23,7 +22,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { AIInput } from "@/components/ui/ai-input";
-import { LanguageCourse, Lesson, LessonPage } from "@/lib/types";
+import { LanguageCourse, Lesson } from "@/lib/types";
 import { getStoredCourses, getCompletedPageIds } from "@/lib/store";
 import { RenderIcon } from "@/lib/icons";
 import { LessonmarkView } from "./lessonmark-view";
@@ -199,7 +198,7 @@ export function Dashboard({ username, onResetName }: DashboardProps) {
             </Breadcrumb>
           </div>
 
-          {/* Lessons List in the same card UI */}
+          {/* Lessons List in exact card UI */}
           <div className="pt-2 space-y-2.5">
             {filteredLessons.map((lesson) => {
               const doneCount = lesson.pages.filter((p) => completedSet.has(p.id)).length;
@@ -248,7 +247,7 @@ export function Dashboard({ username, onResetName }: DashboardProps) {
     );
   }
 
-  // 5. Inside a Language: Main 3 Options Menu (Lecke, Napi gyors kérdések, Fogalmazás)
+  // 5. Inside a Language: 3 Mode Buttons Sized Exactly Like Chosen Language Box
   if (selectedCourse) {
     return (
       <main className="min-h-screen w-full bg-[#fdfdfd] text-zinc-900 flex flex-col justify-between items-center px-4 py-6 selection:bg-zinc-100 font-sans max-w-lg mx-auto">
@@ -309,69 +308,60 @@ export function Dashboard({ username, onResetName }: DashboardProps) {
             </Breadcrumb>
           </div>
 
-          {/* 3 Main Action Cards: Lecke, Napi gyors kérdések, Fogalmazás */}
-          <div className="pt-3 space-y-3">
-            {/* Option 1: Leckék */}
+          {/* 3 Mode Buttons Sized Exactly Like Chosen Language Box */}
+          <div className="pt-2 flex flex-wrap gap-3">
+            {/* Box 1: Leckék */}
             <div
               onClick={() => setLanguageMode("lessons")}
-              className="w-full flex items-center justify-between p-4 rounded-3xl border border-zinc-200/90 bg-white hover:border-zinc-300 hover:shadow-xs transition-all cursor-pointer group"
+              className="group inline-flex items-center gap-3.5 p-3.5 rounded-2xl border border-zinc-200 bg-white shadow-2xs hover:border-zinc-300 hover:shadow-sm transition-all cursor-pointer min-w-[160px] flex-1"
             >
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-zinc-100 group-hover:bg-zinc-200/80 text-zinc-800 flex items-center justify-center shrink-0 transition-colors">
-                  <BookOpen className="w-5 h-5" />
-                </div>
-                <div className="text-left min-w-0">
-                  <span className="text-base font-bold text-zinc-950 block">
-                    Leckék
-                  </span>
-                  <span className="text-xs text-zinc-400">
-                    {selectedCourse.lessons.length} lecke • Tananyagok & Lessonmark
-                  </span>
-                </div>
+              <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 border border-zinc-100 shadow-2xs text-zinc-800">
+                <BookOpen className="w-4 h-4" />
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-900 group-hover:translate-x-0.5 transition-all shrink-0" />
+              <div className="flex flex-col text-left">
+                <span className="text-sm font-bold text-zinc-950 leading-tight">
+                  Leckék
+                </span>
+                <span className="text-xs text-zinc-400 font-normal">
+                  {selectedCourse.lessons.length} lecke
+                </span>
+              </div>
             </div>
 
-            {/* Option 2: Napi gyors kérdések */}
+            {/* Box 2: Napi gyors kérdések */}
             <div
               onClick={() => setLanguageMode("quick_questions")}
-              className="w-full flex items-center justify-between p-4 rounded-3xl border border-zinc-200/90 bg-white hover:border-zinc-300 hover:shadow-xs transition-all cursor-pointer group"
+              className="group inline-flex items-center gap-3.5 p-3.5 rounded-2xl border border-zinc-200 bg-white shadow-2xs hover:border-zinc-300 hover:shadow-sm transition-all cursor-pointer min-w-[160px] flex-1"
             >
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-zinc-100 group-hover:bg-zinc-200/80 text-zinc-800 flex items-center justify-center shrink-0 transition-colors">
-                  <HelpCircle className="w-5 h-5" />
-                </div>
-                <div className="text-left min-w-0">
-                  <span className="text-base font-bold text-zinc-950 block">
-                    Napi gyors kérdések
-                  </span>
-                  <span className="text-xs text-zinc-400">
-                    Interaktív feleletválasztós kvíz • AI generálás
-                  </span>
-                </div>
+              <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 border border-zinc-100 shadow-2xs text-zinc-800">
+                <HelpCircle className="w-4 h-4" />
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-900 group-hover:translate-x-0.5 transition-all shrink-0" />
+              <div className="flex flex-col text-left">
+                <span className="text-sm font-bold text-zinc-950 leading-tight truncate">
+                  Napi kérdések
+                </span>
+                <span className="text-xs text-zinc-400 font-normal">
+                  Kvíz & gyakorlat
+                </span>
+              </div>
             </div>
 
-            {/* Option 3: Fogalmazás */}
+            {/* Box 3: Fogalmazás */}
             <div
               onClick={() => setLanguageMode("essay")}
-              className="w-full flex items-center justify-between p-4 rounded-3xl border border-zinc-200/90 bg-white hover:border-zinc-300 hover:shadow-xs transition-all cursor-pointer group"
+              className="group inline-flex items-center gap-3.5 p-3.5 rounded-2xl border border-zinc-200 bg-white shadow-2xs hover:border-zinc-300 hover:shadow-sm transition-all cursor-pointer min-w-[160px] flex-1"
             >
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-zinc-100 group-hover:bg-zinc-200/80 text-zinc-800 flex items-center justify-center shrink-0 transition-colors">
-                  <PenTool className="w-5 h-5" />
-                </div>
-                <div className="text-left min-w-0">
-                  <span className="text-base font-bold text-zinc-950 block">
-                    Fogalmazás
-                  </span>
-                  <span className="text-xs text-zinc-400">
-                    Szövegírás & NVIDIA NIM AI javítás
-                  </span>
-                </div>
+              <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 border border-zinc-100 shadow-2xs text-zinc-800">
+                <PenTool className="w-4 h-4" />
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-900 group-hover:translate-x-0.5 transition-all shrink-0" />
+              <div className="flex flex-col text-left">
+                <span className="text-sm font-bold text-zinc-950 leading-tight">
+                  Fogalmazás
+                </span>
+                <span className="text-xs text-zinc-400 font-normal">
+                  AI javítás
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -477,13 +467,13 @@ export function Dashboard({ username, onResetName }: DashboardProps) {
               {/* Flag Icon */}
               <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-zinc-100 shadow-2xs">
                 <svg viewBox="0 0 60 30" className="w-full h-full object-cover">
-                  <clipPath id="s-dash-h2">
+                  <clipPath id="s-dash-h4">
                     <path d="M0,0 v30 h60 v-30 z" />
                   </clipPath>
-                  <clipPath id="t-dash-h2">
+                  <clipPath id="t-dash-h4">
                     <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
                   </clipPath>
-                  <g clipPath="url(#s-dash-h2)">
+                  <g clipPath="url(#s-dash-h4)">
                     <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
                     <path
                       d="M0,0 L60,30 M60,0 L0,30"
@@ -492,7 +482,7 @@ export function Dashboard({ username, onResetName }: DashboardProps) {
                     />
                     <path
                       d="M0,0 L60,30 M60,0 L0,30"
-                      clipPath="url(#t-dash-h2)"
+                      clipPath="url(#t-dash-h4)"
                       stroke="#C8102E"
                       strokeWidth="4"
                     />
