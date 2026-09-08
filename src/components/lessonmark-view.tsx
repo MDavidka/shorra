@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   Circle,
   Layers,
-  Check,
   Award,
   X,
 } from "lucide-react";
@@ -17,7 +16,6 @@ import { LanguageCourse, Lesson, LessonPage } from "@/lib/types";
 import { RenderIcon } from "@/lib/icons";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { togglePageCompleted, getCompletedPageIds } from "@/lib/store";
-import { AIInput } from "@/components/ui/ai-input";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -105,7 +103,7 @@ export function LessonmarkView({
         <h2 className="text-2xl font-bold text-zinc-900 mb-2">Nincsenek még oldalak</h2>
         <button
           onClick={onBackToDashboard}
-          className="mt-4 px-5 py-2 text-sm font-semibold text-white bg-zinc-900 rounded-full"
+          className="mt-4 px-5 py-2 text-sm font-semibold text-white bg-zinc-900 rounded-full cursor-pointer"
         >
           Vissza
         </button>
@@ -120,29 +118,29 @@ export function LessonmarkView({
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToDashboard}
-            className="flex items-center justify-center w-9 h-9 rounded-full text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors cursor-pointer"
             title="Vissza a leckékhez"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
 
-          {/* Language Indicator Header (Matches Photo 1: Flag + Angol) */}
+          {/* Language Header */}
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
               {course.id === "angol" ? (
                 <svg viewBox="0 0 60 30" className="w-full h-full object-cover">
-                  <clipPath id="s-mark">
+                  <clipPath id="s-mark-p">
                     <path d="M0,0 v30 h60 v-30 z" />
                   </clipPath>
-                  <clipPath id="t-mark">
+                  <clipPath id="t-mark-p">
                     <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
                   </clipPath>
-                  <g clipPath="url(#s-mark)">
+                  <g clipPath="url(#s-mark-p)">
                     <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
                     <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
                     <path
                       d="M0,0 L60,30 M60,0 L0,30"
-                      clipPath="url(#t-mark)"
+                      clipPath="url(#t-mark-p)"
                       stroke="#C8102E"
                       strokeWidth="4"
                     />
@@ -160,17 +158,17 @@ export function LessonmarkView({
           </div>
         </div>
 
-        {/* Lessonmark Trigger Button */}
+        {/* Lessonmark Drawer Pill */}
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200/80 text-xs font-semibold text-zinc-800 transition-colors"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200/80 text-xs font-semibold text-zinc-800 transition-colors cursor-pointer"
         >
           <Layers className="w-3.5 h-3.5 text-emerald-600" />
           <span>Lessonmark ({activePageIndex + 1}/{pages.length})</span>
         </button>
       </header>
 
-      {/* Active Breadcrumb: Otthon > Nyelvek > Angol > Lecke */}
+      {/* Breadcrumbs: Otthon > Nyelvek > Angol > Lecke */}
       <div className="w-full px-6 pb-4">
         <Breadcrumb>
           <BreadcrumbList className="text-xs text-zinc-400">
@@ -213,16 +211,15 @@ export function LessonmarkView({
       {/* Main Spacious Content */}
       <main className="w-full px-6 py-2 flex-1 flex flex-col justify-between">
         <div className="space-y-6">
-          {/* Markdown Content of Active Page */}
           <MarkdownRenderer content={currentPage.markdownContent} />
         </div>
 
         {/* Bottom Navigation Controls */}
-        <div className="mt-12 pt-8 pb-4 flex items-center justify-between gap-4">
+        <div className="mt-16 pt-8 pb-12 flex items-center justify-between gap-4">
           <button
             onClick={handlePrevPage}
             disabled={activePageIndex === 0}
-            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               activePageIndex === 0
                 ? "opacity-30 cursor-not-allowed text-zinc-400"
                 : "text-zinc-700 hover:bg-zinc-100"
@@ -232,10 +229,10 @@ export function LessonmarkView({
             <span>Előző</span>
           </button>
 
-          {/* Center: Completion checkmark */}
+          {/* Completion Checkmark */}
           <button
             onClick={handleToggleComplete}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               isCurrentCompleted
                 ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                 : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
@@ -257,7 +254,7 @@ export function LessonmarkView({
           {activePageIndex < pages.length - 1 ? (
             <button
               onClick={handleNextPage}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-zinc-950 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-zinc-950 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer"
             >
               <span>Következő</span>
               <ChevronRight className="w-4 h-4" />
@@ -265,24 +262,15 @@ export function LessonmarkView({
           ) : (
             <button
               onClick={onBackToDashboard}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-zinc-950 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-zinc-950 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer"
             >
-              <span>Vége</span>
+              <span>Vissza a leckékhez</span>
             </button>
           )}
         </div>
-
-        {/* Site-wide MCP Assistant for Page Content Explanation */}
-        <div className="pt-6 pb-6 border-t border-zinc-100">
-          <AIInput
-            placeholder="Kérdezz bármit erről az oldalról..."
-            pageContext={currentPage.markdownContent}
-            language={course.name}
-          />
-        </div>
       </main>
 
-      {/* Slide-over / Modal Lessonmark Directory Drawer */}
+      {/* Slide-over Lessonmark Directory Drawer */}
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
           <div className="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-200">
@@ -298,7 +286,7 @@ export function LessonmarkView({
               </div>
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center text-zinc-600 transition-colors"
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center text-zinc-600 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -318,7 +306,7 @@ export function LessonmarkView({
                       setIsDrawerOpen(false);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left text-sm transition-all ${
+                    className={`w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl text-left text-sm transition-all cursor-pointer ${
                       isActive
                         ? "bg-zinc-950 text-white font-semibold"
                         : "bg-zinc-50 hover:bg-zinc-100 text-zinc-800"

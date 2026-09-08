@@ -72,6 +72,11 @@ export default function AdminPage() {
   });
   const [pageEditorTab, setPageEditorTab] = useState<"write" | "preview">("write");
 
+  // JSON Import Modal State
+  const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
+  const [jsonImportText, setJsonImportText] = useState("");
+  const [jsonImportError, setJsonImportError] = useState<string | null>(null);
+
   // Notification message
   const [notification, setNotification] = useState<string | null>(null);
 
@@ -323,6 +328,113 @@ Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formáz
     showNotification("JSON fájl exportálva!");
   };
 
+  const handleOpenJsonImport = () => {
+    setJsonImportError(null);
+    const sample = {
+      title: "Új Lecke Neve",
+      lessonNumber: (currentCourse?.lessons?.length || 0) + 1,
+      icon: "sparkles",
+      level: "A1 Kezdő",
+      description: "Lecke rövid leírása...",
+      pages: [
+        {
+          pageNumber: `${(currentCourse?.lessons?.length || 0) + 1}.1`,
+          title: "Bevezetés és Alapok",
+          icon: "book-open",
+          durationMinutes: 4,
+          markdownContent: "# Cím\\n\\nEz egy bekezdés.\\n\\n![kép]()\\n\\n## 👍 Do this\\n\\n- [x] Példa helyes kifejezés\\n\\n## 👎 not this\\n\\n- [ ] Kerülendő hiba"
+        },
+        {
+          pageNumber: `${(currentCourse?.lessons?.length || 0) + 1}.2`,
+          title: "Gyakorlás és Kifejezések",
+          icon: "check-circle",
+          durationMinutes: 3,
+          markdownContent: "# Gyakorlat\\n\\n- [ ] Első feladat\\n- [ ] Második feladat"
+        }
+      ]
+    };
+    setJsonImportText(JSON.stringify(sample, null, 2));
+    setIsJsonModalOpen(true);
+  };
+
+  const handleImportJSON = () => {
+    try {
+      setJsonImportError(null);
+      const parsed = JSON.parse(jsonImportText);
+
+      // Scenario A: Array of Courses or Full Course
+      if (Array.isArray(parsed) && parsed[0]?.lessons) {
+        setCourses(parsed);
+        saveCourses(parsed);
+        if (parsed[0]?.lessons?.[0]) {
+          setSelectedCourseId(parsed[0].id);
+          setSelectedLessonId(parsed[0].lessons[0].id);
+        }
+        setIsJsonModalOpen(false);
+        showNotification("Teljes kurzusrendszer sikeresen importálva!");
+        return;
+      }
+
+      // Scenario B: Single Course
+      if (parsed.id && parsed.lessons) {
+        const updated = courses.some(c => c.id === parsed.id)
+          ? courses.map(c => c.id === parsed.id ? parsed : c)
+          : [...courses, parsed];
+        setCourses(updated);
+        saveCourses(updated);
+        setSelectedCourseId(parsed.id);
+        if (parsed.lessons[0]) setSelectedLessonId(parsed.lessons[0].id);
+        setIsJsonModalOpen(false);
+        showNotification(`'${parsed.name || parsed.id}' kurzus sikeresen importálva!`);
+        return;
+      }
+
+      // Scenario C: Single Lesson with Pages { title, lessonNumber, icon, pages: [...] }
+      if (parsed.title) {
+        const updatedCourses = [...courses];
+        const cIdx = updatedCourses.findIndex((c) => c.id === currentCourse.id);
+        if (cIdx === -1) {
+          setJsonImportError("Nem található kiválasztott nyelv.");
+          return;
+        }
+
+        const newLessonId = parsed.id || `lesson-${Date.now()}`;
+        const newLesson: Lesson = {
+          id: newLessonId,
+          languageId: currentCourse.id,
+          lessonNumber: Number(parsed.lessonNumber) || ((currentCourse?.lessons?.length || 0) + 1),
+          title: parsed.title,
+          icon: parsed.icon || "book-open",
+          level: parsed.level || "A1 Kezdő",
+          description: parsed.description || "",
+          pages: Array.isArray(parsed.pages)
+            ? parsed.pages.map((p: any, idx: number) => ({
+                id: p.id || `page-${Date.now()}-${idx}`,
+                lessonId: newLessonId,
+                pageNumber: p.pageNumber || `${parsed.lessonNumber || 1}.${idx + 1}`,
+                title: p.title || `Oldal ${idx + 1}`,
+                icon: p.icon || "sparkles",
+                durationMinutes: Number(p.durationMinutes) || 3,
+                markdownContent: p.markdownContent || "",
+              }))
+            : [],
+        };
+
+        updatedCourses[cIdx].lessons.push(newLesson);
+        setCourses(updatedCourses);
+        saveCourses(updatedCourses);
+        setSelectedLessonId(newLessonId);
+        setIsJsonModalOpen(false);
+        showNotification(`'${newLesson.title}' lecke (${newLesson.pages.length} oldal) létrehozva!`);
+        return;
+      }
+
+      setJsonImportError("Érvénytelen formátum. Kérjük adj meg egy Lecke objektumot (title, pages: [...]) vagy egy Kurzus JSON-t.");
+    } catch (e: any) {
+      setJsonImportError(`JSON Hiba: ${e.message}`);
+    }
+  };
+
   const insertMarkdownSnippet = (snippet: string) => {
     setPageForm((prev) => ({
       ...prev,
@@ -353,7 +465,14 @@ Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formáz
             </h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={handleOpenJsonImport}
+              className="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-xs font-semibold text-emerald-800 transition-colors flex items-center gap-1.5"
+            >
+              <Code className="w-3.5 h-3.5 text-emerald-600" />
+              <span>JSON Beillesztés</span>
+            </button>
             <button
               onClick={handleExportJSON}
               className="px-3.5 py-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200/80 text-xs font-semibold text-zinc-700 transition-colors"
@@ -755,6 +874,55 @@ Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formáz
               className="px-5 py-2 rounded-full bg-zinc-950 text-white text-xs font-semibold hover:bg-zinc-800"
             >
               Oldal Mentése
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* --- MODAL: JSON PASTE IMPORT (INSTANT LESSON CREATOR) --- */}
+      <Dialog open={isJsonModalOpen} onOpenChange={setIsJsonModalOpen}>
+        <DialogContent className="max-w-2xl w-[95vw] rounded-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-zinc-900 flex items-center gap-2">
+              <Code className="w-5 h-5 text-emerald-600" />
+              <span>JSON Beillesztése (Azonnali Lecke Létrehozás)</span>
+            </DialogTitle>
+            <DialogDescription className="text-xs text-zinc-500">
+              Illeszd be a lecke JSON struktúráját (cím, lecke száma, ikon és oldalak markdown tartalommal).
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2">
+            {jsonImportError && (
+              <div className="p-3 rounded-2xl bg-rose-50 border border-rose-100 text-rose-700 text-xs font-medium">
+                {jsonImportError}
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <Label className="text-xs text-zinc-500">JSON Kód:</Label>
+              <Textarea
+                value={jsonImportText}
+                onChange={(e) => setJsonImportText(e.target.value)}
+                rows={12}
+                placeholder={`{\n  "title": "Új Lecke",\n  "pages": [...]\n}`}
+                className="font-mono text-xs rounded-2xl p-3.5 leading-relaxed bg-zinc-50 border-0"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="flex items-center justify-end gap-2 pt-2">
+            <button
+              onClick={() => setIsJsonModalOpen(false)}
+              className="px-4 py-2 rounded-full text-xs font-semibold text-zinc-600 hover:bg-zinc-100"
+            >
+              Mégse
+            </button>
+            <button
+              onClick={handleImportJSON}
+              className="px-5 py-2 rounded-full bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors"
+            >
+              JSON Betöltése & Mentés
             </button>
           </DialogFooter>
         </DialogContent>

@@ -188,6 +188,187 @@ Ez egy bekezdés. A Markdown segítségével egyszerűen lehet szöveget formáz
           </div>
         </div>
 
+        {/* Emojis & Icons Reference Section */}
+        <div className="space-y-6 pt-6 border-t border-zinc-100">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-zinc-950 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-emerald-600" />
+                <span>Új Emojik & Ikonok Gyűjteménye</span>
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Kattints bármelyik emojira vagy ikon azonosítóra a vágólapra másoláshoz!
+              </p>
+            </div>
+          </div>
+
+          {/* Emojis Grid */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              Gyakori Emojik (Kattintásra másol)
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+              {[
+                { emoji: "🇬🇧", name: "Angol Zászló", code: "🇬🇧" },
+                { emoji: "🇩🇪", name: "Német Zászló", code: "🇩🇪" },
+                { emoji: "🇪🇸", name: "Spanyol Zászló", code: "🇪🇸" },
+                { emoji: "🇫🇷", name: "Francia Zászló", code: "🇫🇷" },
+                { emoji: "🇯🇵", name: "Japán Zászló", code: "🇯🇵" },
+                { emoji: "🇭🇺", name: "Magyar Zászló", code: "🇭🇺" },
+                { emoji: "✨", name: "Csillogás", code: "✨" },
+                { emoji: "💡", name: "Ötlet / Szabály", code: "💡" },
+                { emoji: "📖", name: "Olvasmány", code: "📖" },
+                { emoji: "✍️", name: "Írás / Gyakorlat", code: "✍️" },
+                { emoji: "🎯", name: "Célkitűzés", code: "🎯" },
+                { emoji: "🍃", name: "Levél", code: "🍃" },
+                { emoji: "🔥", name: "Streak", code: "🔥" },
+                { emoji: "☕", name: "Kávé / Szünet", code: "☕" },
+                { emoji: "✈️", name: "Utazás", code: "✈️" },
+                { emoji: "🧠", name: "Memória", code: "🧠" },
+                { emoji: "👍", name: "Do this (Helyes)", code: "👍" },
+                { emoji: "👎", name: "Not this (Hiba)", code: "👎" },
+              ].map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleCopy(item.emoji, 1000 + idx)}
+                  className="flex items-center gap-2.5 p-3 rounded-2xl bg-zinc-50 hover:bg-zinc-100 text-left transition-colors group cursor-pointer"
+                >
+                  <span className="text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    {item.emoji}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-xs font-semibold text-zinc-900 block truncate">
+                      {item.name}
+                    </span>
+                    <span className="text-[10px] text-zinc-400">
+                      {copiedIndex === 1000 + idx ? "Másolva! ✓" : "Kattints"}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Icons ID Grid */}
+          <div className="space-y-3 pt-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              Admin Ikon Azonosítók (Icon IDs)
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+              {[
+                { id: "sparkles", name: "sparkles", icon: "✨" },
+                { id: "book-open", name: "book-open", icon: "📖" },
+                { id: "message-circle", name: "message-circle", icon: "💬" },
+                { id: "pen-tool", name: "pen-tool", icon: "✍️" },
+                { id: "zap", name: "zap", icon: "⚡" },
+                { id: "volume-2", name: "volume-2", icon: "🔊" },
+                { id: "headphones", name: "headphones", icon: "🎧" },
+                { id: "globe", name: "globe", icon: "🌍" },
+                { id: "star", name: "star", icon: "⭐" },
+                { id: "lightbulb", name: "lightbulb", icon: "💡" },
+                { id: "graduation-cap", name: "graduation-cap", icon: "🎓" },
+                { id: "target", name: "target", icon: "🎯" },
+              ].map((ic, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleCopy(ic.id, 2000 + idx)}
+                  className="flex items-center justify-between p-3 rounded-2xl bg-zinc-50 hover:bg-zinc-100 text-left transition-colors font-mono text-xs text-zinc-800 cursor-pointer"
+                >
+                  <span>{ic.name}</span>
+                  <span className="text-xs text-zinc-400 font-sans">
+                    {copiedIndex === 2000 + idx ? "✓" : ic.icon}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* JSON Quick Import Schema Section */}
+        <div className="space-y-4 pt-6 border-t border-zinc-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-zinc-950">
+                Azonnali Lecke JSON Sablon (Admin Beillesztés)
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Ezzel a JSON struktúrával egyetlen beillesztéssel létrehozhatsz egy teljes leckét minden oldalával az Admin felületen.
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                handleCopy(
+                  JSON.stringify(
+                    {
+                      title: "Új Lecke Neve",
+                      lessonNumber: 1,
+                      icon: "sparkles",
+                      level: "A1 Kezdő",
+                      pages: [
+                        {
+                          pageNumber: "1.1",
+                          title: "Bevezetés és Alapok",
+                          icon: "book-open",
+                          durationMinutes: 4,
+                          markdownContent: "# Cím\n\nEz egy bekezdés.\n\n![kép]()\n\n## 👍 Do this\n\n- [x] Helyes minta",
+                        },
+                        {
+                          pageNumber: "1.2",
+                          title: "Gyakorlás",
+                          icon: "check-circle",
+                          durationMinutes: 3,
+                          markdownContent: "# Feladat\n\n- [ ] Gyakorló feladat 1",
+                        },
+                      ],
+                    },
+                    null,
+                    2
+                  ),
+                  999
+                )
+              }
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-zinc-100 hover:bg-zinc-200 text-xs font-semibold text-zinc-800 transition-colors"
+            >
+              {copiedIndex === 999 ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-700">Másolva!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>JSON Másolása</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <pre className="p-4 bg-zinc-950 text-emerald-400 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed">
+{`{
+  "title": "Új Lecke Neve",
+  "lessonNumber": 1,
+  "icon": "sparkles",
+  "level": "A1 Kezdő",
+  "pages": [
+    {
+      "pageNumber": "1.1",
+      "title": "Bevezetés és Alapok",
+      "icon": "book-open",
+      "durationMinutes": 4,
+      "markdownContent": "# Cím\\n\\nEz egy bekezdés.\\n\\n![kép]()\\n\\n## 👍 Do this\\n\\n- [x] Helyes minta"
+    },
+    {
+      "pageNumber": "1.2",
+      "title": "Gyakorlás",
+      "icon": "check-circle",
+      "durationMinutes": 3,
+      "markdownContent": "# Feladat\\n\\n- [ ] Gyakorló feladat 1"
+    }
+  ]
+}`}
+          </pre>
+        </div>
+
         {/* Live Playground */}
         <div className="space-y-4 pt-6 border-t border-zinc-100">
           <h2 className="text-xl font-bold text-zinc-950 flex items-center gap-2">
