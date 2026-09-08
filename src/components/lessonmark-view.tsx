@@ -17,6 +17,14 @@ import { LanguageCourse, Lesson, LessonPage } from "@/lib/types";
 import { RenderIcon } from "@/lib/icons";
 import { MarkdownRenderer } from "./markdown-renderer";
 import { togglePageCompleted, getCompletedPageIds } from "@/lib/store";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface LessonmarkViewProps {
   course: LanguageCourse;
@@ -106,13 +114,13 @@ export function LessonmarkView({
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 flex flex-col selection:bg-zinc-100 font-sans">
-      {/* Top Floating / Clean Header */}
-      <header className="w-full max-w-xl mx-auto px-6 pt-8 pb-4 flex items-center justify-between">
+      {/* Top Header */}
+      <header className="w-full max-w-xl mx-auto px-6 pt-8 pb-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToDashboard}
             className="flex items-center justify-center w-9 h-9 rounded-full text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
-            title="Vissza a főoldalra"
+            title="Vissza a leckékhez"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -161,8 +169,48 @@ export function LessonmarkView({
         </button>
       </header>
 
+      {/* Active Breadcrumb: Otthon > Nyelvek > Angol > Lecke */}
+      <div className="w-full max-w-xl mx-auto px-6 pb-4">
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs text-zinc-400">
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={onBackToDashboard}
+                className="hover:text-zinc-800 cursor-pointer"
+              >
+                Otthon
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={onBackToDashboard}
+                className="hover:text-zinc-800 cursor-pointer"
+              >
+                Nyelvek
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={onBackToDashboard}
+                className="hover:text-zinc-800 cursor-pointer"
+              >
+                {course.name}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="font-medium text-zinc-700 truncate max-w-[150px]">
+                {lesson.lessonNumber}. {lesson.title}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
       {/* Main Spacious Content */}
-      <main className="w-full max-w-xl mx-auto px-6 py-4 flex-1 flex flex-col justify-between">
+      <main className="w-full max-w-xl mx-auto px-6 py-2 flex-1 flex flex-col justify-between">
         <div className="space-y-6">
           {/* Markdown Content of Active Page */}
           <MarkdownRenderer content={currentPage.markdownContent} />
